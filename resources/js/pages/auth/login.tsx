@@ -18,6 +18,12 @@ type Props = {
     canRegister: boolean;
 };
 
+const socialProviders = [
+    { key: 'google', label: 'Continue with Google' },
+    { key: 'facebook', label: 'Continue with Facebook' },
+    { key: 'apple', label: 'Continue with Apple' },
+] as const;
+
 export default function Login({
     status,
     canResetPassword,
@@ -109,6 +115,21 @@ export default function Login({
                     </>
                 )}
             </Form>
+
+            <div className="space-y-3">
+                <div className="relative text-center text-xs uppercase text-muted-foreground">
+                    <span className="bg-background px-2">Or continue with</span>
+                    <div className="absolute inset-x-0 top-1/2 -z-10 border-t border-border" />
+                </div>
+
+                <div className="grid gap-2">
+                    {socialProviders.map((provider) => (
+                        <Button key={provider.key} variant="outline" asChild className="w-full">
+                            <a href={`/auth/${provider.key}/redirect`}>{provider.label}</a>
+                        </Button>
+                    ))}
+                </div>
+            </div>
 
             {status && (
                 <div className="mb-4 text-center text-sm font-medium text-green-600">
