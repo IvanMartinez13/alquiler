@@ -1,4 +1,8 @@
 import { Form, Head } from '@inertiajs/react';
+import { FaFacebookF, FaGoogle } from 'react-icons/fa';
+import AuthDivider from '@/components/auth/auth-divider';
+import AuthSocialButton from '@/components/auth/auth-social-button';
+import AuthStatus from '@/components/auth/auth-status';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -19,9 +23,8 @@ type Props = {
 };
 
 const socialProviders = [
-    { key: 'google', label: 'Continue with Google' },
-    { key: 'facebook', label: 'Continue with Facebook' },
-    { key: 'apple', label: 'Continue with Apple' },
+    { key: 'google', label: 'Continue with Google', icon: FaGoogle },
+    { key: 'facebook', label: 'Continue with Facebook', icon: FaFacebookF },
 ] as const;
 
 export default function Login({
@@ -39,11 +42,11 @@ export default function Login({
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
+                className="flex flex-col gap-5"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Email address</Label>
                                 <Input
@@ -55,6 +58,7 @@ export default function Login({
                                     tabIndex={1}
                                     autoComplete="email"
                                     placeholder="email@example.com"
+                                    className="h-11 rounded-xl"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -79,6 +83,7 @@ export default function Login({
                                     tabIndex={2}
                                     autoComplete="current-password"
                                     placeholder="Password"
+                                    className="h-11 rounded-xl"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -94,7 +99,7 @@ export default function Login({
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
+                                className="mt-2 h-11 w-full rounded-xl"
                                 tabIndex={4}
                                 disabled={processing}
                                 data-test="login-button"
@@ -116,25 +121,25 @@ export default function Login({
                 )}
             </Form>
 
-            <div className="space-y-3">
-                <div className="relative text-center text-xs uppercase text-muted-foreground">
-                    <span className="bg-background px-2">Or continue with</span>
-                    <div className="absolute inset-x-0 top-1/2 -z-10 border-t border-border" />
-                </div>
+            <div className="space-y-4">
+                <AuthDivider label="Or continue with" />
 
                 <div className="grid gap-2">
                     {socialProviders.map((provider) => (
-                        <Button key={provider.key} variant="outline" asChild className="w-full">
-                            <a href={`/auth/${provider.key}/redirect`}>{provider.label}</a>
-                        </Button>
+                        <AuthSocialButton
+                            key={provider.key}
+                            href={`/auth/${provider.key}/redirect`}
+                            label={provider.label}
+                            icon={provider.icon}
+                        />
                     ))}
                 </div>
             </div>
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <AuthStatus className="text-center">
                     {status}
-                </div>
+                </AuthStatus>
             )}
         </AuthLayout>
     );

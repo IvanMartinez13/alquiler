@@ -15,11 +15,11 @@ Route::middleware(['auth'])->group(function () {
         ->name('social-accounts.edit');
 
     Route::get('settings/social-accounts/{provider}/redirect', [SocialAccountController::class, 'redirect'])
-        ->whereIn('provider', ['google', 'facebook', 'apple'])
+        ->whereIn('provider', ['google', 'facebook'])
         ->name('social-accounts.redirect');
 
     Route::delete('settings/social-accounts/{provider}', [SocialAccountController::class, 'destroy'])
-        ->whereIn('provider', ['google', 'facebook', 'apple'])
+        ->whereIn('provider', ['google', 'facebook'])
         ->name('social-accounts.destroy');
 });
 

@@ -10,12 +10,12 @@ Route::inertia('/', 'welcome', [
 
 Route::middleware('guest')->group(function () {
     Route::get('auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])
-        ->whereIn('provider', ['google', 'facebook', 'apple'])
+        ->whereIn('provider', ['google', 'facebook'])
         ->name('social.redirect');
 });
 
 Route::match(['get', 'post'], 'auth/{provider}/callback', [SocialAuthController::class, 'callback'])
-    ->whereIn('provider', ['google', 'facebook', 'apple'])
+    ->whereIn('provider', ['google', 'facebook'])
     ->name('social.callback');
 
 Route::middleware(['auth', 'verified'])->group(function () {

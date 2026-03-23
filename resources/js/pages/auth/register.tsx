@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import AuthDivider from '@/components/auth/auth-divider';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -21,11 +22,11 @@ export default function Register() {
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
                 disableWhileProcessing
-                className="flex flex-col gap-6"
+                className="flex flex-col gap-5"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
                                 <Label htmlFor="name">Name</Label>
                                 <Input
@@ -37,6 +38,7 @@ export default function Register() {
                                     autoComplete="name"
                                     name="name"
                                     placeholder="Full name"
+                                    className="h-11 rounded-xl"
                                 />
                                 <InputError
                                     message={errors.name}
@@ -54,6 +56,7 @@ export default function Register() {
                                     autoComplete="email"
                                     name="email"
                                     placeholder="email@example.com"
+                                    className="h-11 rounded-xl"
                                 />
                                 <InputError message={errors.email} />
                             </div>
@@ -67,6 +70,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password"
                                     placeholder="Password"
+                                    className="h-11 rounded-xl"
                                 />
                                 <InputError message={errors.password} />
                             </div>
@@ -82,6 +86,7 @@ export default function Register() {
                                     autoComplete="new-password"
                                     name="password_confirmation"
                                     placeholder="Confirm password"
+                                    className="h-11 rounded-xl"
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -90,7 +95,7 @@ export default function Register() {
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full"
+                                className="mt-2 h-11 w-full rounded-xl"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >
@@ -98,6 +103,8 @@ export default function Register() {
                                 Create account
                             </Button>
                         </div>
+
+                        <AuthDivider label="Account access" />
 
                         <div className="text-center text-sm text-muted-foreground">
                             Already have an account?{' '}

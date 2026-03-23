@@ -12,7 +12,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialAccountController extends Controller
 {
-    private const SUPPORTED_PROVIDERS = ['google', 'facebook', 'apple'];
+    private const SUPPORTED_PROVIDERS = ['google', 'facebook'];
 
     public function edit(Request $request): Response
     {

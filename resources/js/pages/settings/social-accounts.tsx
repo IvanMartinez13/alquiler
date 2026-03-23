@@ -6,7 +6,7 @@ import SettingsLayout from '@/layouts/settings/layout';
 import type { BreadcrumbItem } from '@/types';
 
 type SocialProvider = {
-    key: 'google' | 'facebook' | 'apple';
+    key: 'google' | 'facebook';
     label: string;
     connected: boolean;
     connected_email?: string | null;

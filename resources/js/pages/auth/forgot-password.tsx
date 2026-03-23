@@ -1,6 +1,8 @@
 // Components
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
+import AuthDivider from '@/components/auth/auth-divider';
+import AuthStatus from '@/components/auth/auth-status';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
@@ -19,12 +21,12 @@ export default function ForgotPassword({ status }: { status?: string }) {
             <Head title="Forgot password" />
 
             {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <AuthStatus className="mb-2 text-center">
                     {status}
-                </div>
+                </AuthStatus>
             )}
 
-            <div className="space-y-6">
+            <div className="space-y-5">
                 <Form {...email.form()}>
                     {({ processing, errors }) => (
                         <>
@@ -37,14 +39,15 @@ export default function ForgotPassword({ status }: { status?: string }) {
                                     autoComplete="off"
                                     autoFocus
                                     placeholder="email@example.com"
+                                    className="h-11 rounded-xl"
                                 />
 
                                 <InputError message={errors.email} />
                             </div>
 
-                            <div className="my-6 flex items-center justify-start">
+                            <div className="my-5 flex items-center justify-start">
                                 <Button
-                                    className="w-full"
+                                    className="h-11 w-full rounded-xl"
                                     disabled={processing}
                                     data-test="email-password-reset-link-button"
                                 >
@@ -57,6 +60,8 @@ export default function ForgotPassword({ status }: { status?: string }) {
                         </>
                     )}
                 </Form>
+
+                <AuthDivider label="Navigation" />
 
                 <div className="space-x-1 text-center text-sm text-muted-foreground">
                     <span>Or, return to</span>
