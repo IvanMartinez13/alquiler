@@ -47,11 +47,14 @@ class HandleInertiaRequests extends Middleware
                     'email' => $user->email,
                     'role' => $user->role->value,
                     'avatar' => $user->avatar,
+                    'locale' => $user->locale,
                     'email_verified_at' => $user->email_verified_at,
                     'created_at' => $user->created_at,
                     'updated_at' => $user->updated_at,
                 ] : null,
             ],
+            'locale' => app()->getLocale(),
+            'supported_locales' => config('app.supported_locales', ['en']),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

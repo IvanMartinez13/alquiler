@@ -7,6 +7,7 @@ import { useCurrentUrl } from '@/hooks/use-current-url';
 import { cn, toUrl } from '@/lib/utils';
 import type { NavItem } from '@/types';
 import { edit as editAppearance } from '@/routes/appearance';
+import { edit as editLanguage } from '@/routes/language';
 import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
 
@@ -24,6 +25,11 @@ const sidebarNavItems: NavItem[] = [
     {
         title: 'Social accounts',
         href: '/settings/social-accounts',
+        icon: null,
+    },
+    {
+        title: 'Language',
+        href: editLanguage(),
         icon: null,
     },
     {

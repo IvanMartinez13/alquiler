@@ -141,3 +141,70 @@
         @apply bg-background text-foreground;
     }
 }
+
+@layer components {
+    .choices.choices-tailwind {
+        @apply mt-1 w-full text-sm;
+        --choices-bg-color: var(--background);
+        --choices-bg-color-dropdown: var(--popover);
+        --choices-bg-color-disabled: var(--muted);
+        --choices-text-color: var(--foreground);
+        --choices-keyline-color: var(--input);
+        --choices-highlighted-color: var(--accent);
+        --choices-font-size-md: 0.875rem;
+        --choices-font-size-lg: 0.875rem;
+        --choices-border-radius: var(--radius);
+    }
+
+    .choices.choices-tailwind .choices__inner {
+        @apply min-h-10 rounded-md border border-input bg-background px-3 py-1 text-foreground;
+    }
+
+    .choices.choices-tailwind .choices__input {
+        @apply bg-popover text-popover-foreground;
+    }
+
+    .choices.choices-tailwind .choices__input::placeholder {
+        @apply text-muted-foreground;
+    }
+
+    .choices.choices-tailwind .choices__list--single {
+        @apply p-0;
+    }
+
+    .choices.choices-tailwind .choices__item--selectable {
+        @apply text-foreground;
+    }
+
+    .choices.choices-tailwind[data-type*='select-one']::after {
+        @apply border-muted-foreground;
+    }
+
+    .choices.choices-tailwind .choices__list--dropdown,
+    .choices.choices-tailwind .choices__list[aria-expanded] {
+        @apply mt-1 rounded-md border border-input bg-popover text-popover-foreground shadow-md;
+    }
+
+    .choices.choices-tailwind .choices__list--dropdown .choices__item,
+    .choices.choices-tailwind .choices__list[aria-expanded] .choices__item {
+        @apply px-3 py-2;
+    }
+
+    .choices.choices-tailwind
+        .choices__list--dropdown
+        .choices__item--selectable.is-highlighted,
+    .choices.choices-tailwind
+        .choices__list[aria-expanded]
+        .choices__item--selectable.is-highlighted {
+        @apply bg-accent text-accent-foreground;
+    }
+
+    .choices.choices-tailwind.is-focused .choices__inner,
+    .choices.choices-tailwind.is-open .choices__inner {
+        @apply border-ring ring-2 ring-ring/40;
+    }
+
+    .choices.choices-tailwind.is-disabled .choices__inner {
+        @apply cursor-not-allowed opacity-50;
+    }
+}

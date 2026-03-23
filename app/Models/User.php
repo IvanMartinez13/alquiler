@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
-#[Fillable(['name', 'email', 'role', 'password', 'provider_name', 'provider_id', 'avatar'])]
+#[Fillable(['name', 'email', 'role', 'password', 'provider_name', 'provider_id', 'avatar', 'locale'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -43,7 +43,7 @@ class User extends Authenticatable
         $userRole = $this->role instanceof UserRole ? $this->role : UserRole::from($this->role);
 
         return collect($roles)
-            ->map(fn (UserRole|string $role) => $role instanceof UserRole ? $role->value : $role)
+            ->map(fn(UserRole|string $role) => $role instanceof UserRole ? $role->value : $role)
             ->contains($userRole->value);
     }
 
