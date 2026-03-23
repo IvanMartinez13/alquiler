@@ -179,4 +179,18 @@ return [
             'warning' => 'Each recovery code can be used once to access your account and will be removed after use. If you need more, click Regenerate codes above.',
         ],
     ],
+    'properties' => [
+        'messages' => [
+            'created' => 'Property created successfully.',
+            'updated' => 'Property updated successfully.',
+            'deleted' => 'Property deleted successfully.',
+        ],
+    ],
+    'amenities' => [
+        'messages' => [
+            'created' => 'Amenity created successfully.',
+            'updated' => 'Amenity updated successfully.',
+            'deleted' => 'Amenity deleted successfully.',
+        ],
+    ],
 ];

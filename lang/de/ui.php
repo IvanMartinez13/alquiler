@@ -179,4 +179,18 @@ return [
             'warning' => 'Jeder Wiederherstellungscode kann nur einmal verwendet werden und wird danach entfernt. Wenn du weitere benoetigst, klicke oben auf Codes neu generieren.',
         ],
     ],
+    'properties' => [
+        'messages' => [
+            'created' => 'Unterkunft erfolgreich erstellt.',
+            'updated' => 'Unterkunft erfolgreich aktualisiert.',
+            'deleted' => 'Unterkunft erfolgreich geloescht.',
+        ],
+    ],
+    'amenities' => [
+        'messages' => [
+            'created' => 'Amenity erfolgreich erstellt.',
+            'updated' => 'Amenity erfolgreich aktualisiert.',
+            'deleted' => 'Amenity erfolgreich geloescht.',
+        ],
+    ],
 ];

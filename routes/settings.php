@@ -6,7 +6,7 @@ use App\Http\Controllers\Settings\SocialAccountController;
 use App\Http\Controllers\Settings\LanguageController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:administrador,propietario'])->group(function () {
     Route::redirect('settings', '/settings/profile');
 
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('social-accounts.destroy');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:administrador,propietario'])->group(function () {
     Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('settings/security', [SecurityController::class, 'edit'])->name('security.edit');

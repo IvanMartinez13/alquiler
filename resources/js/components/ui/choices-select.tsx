@@ -19,6 +19,8 @@ type ChoicesSelectProps = {
     name: string;
     options: ChoiceOption[];
     defaultValue?: string;
+    defaultValues?: string[];
+    multiple?: boolean;
     disabled?: boolean;
     searchEnabled?: boolean;
     searchPlaceholderValue?: string;
@@ -34,6 +36,8 @@ const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
             name,
             options,
             defaultValue,
+            defaultValues,
+            multiple = false,
             disabled = false,
             searchEnabled = false,
             searchPlaceholderValue = 'Search...',
@@ -52,10 +56,12 @@ const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
                 options.map((option) => ({
                     value: option.value,
                     label: option.label,
-                    selected: option.value === defaultValue,
+                    selected: multiple
+                        ? (defaultValues ?? []).includes(option.value)
+                        : option.value === defaultValue,
                     disabled: option.disabled ?? false,
                 })),
-            [options, defaultValue],
+            [options, defaultValue, defaultValues, multiple],
         );
 
         useEffect(() => {
@@ -71,6 +77,7 @@ const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
                 noChoicesText,
                 shouldSort: false,
                 itemSelectText: '',
+                removeItemButton: multiple,
                 choices: choicesData,
             });
 
@@ -93,6 +100,7 @@ const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
                 id={id}
                 name={name}
                 defaultValue={defaultValue}
+                multiple={multiple}
                 disabled={disabled}
                 className={className}
             />

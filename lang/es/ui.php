@@ -179,4 +179,18 @@ return [
             'warning' => 'Cada codigo de recuperacion puede usarse una sola vez para acceder a tu cuenta y se eliminara despues de su uso. Si necesitas mas, haz clic en Regenerar codigos.',
         ],
     ],
+    'properties' => [
+        'messages' => [
+            'created' => 'Propiedad creada correctamente.',
+            'updated' => 'Propiedad actualizada correctamente.',
+            'deleted' => 'Propiedad eliminada correctamente.',
+        ],
+    ],
+    'amenities' => [
+        'messages' => [
+            'created' => 'Amenity creado correctamente.',
+            'updated' => 'Amenity actualizado correctamente.',
+            'deleted' => 'Amenity eliminado correctamente.',
+        ],
+    ],
 ];

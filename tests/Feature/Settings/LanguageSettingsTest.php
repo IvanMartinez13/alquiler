@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -8,7 +9,9 @@ beforeEach(function () {
 });
 
 test('language settings page is displayed', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'role' => UserRole::PROPIETARIO,
+    ]);
 
     $this->actingAs($user)
         ->get(route('language.edit'))
@@ -22,7 +25,9 @@ test('language settings page is displayed', function () {
 });
 
 test('language can be updated to spanish', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'role' => UserRole::PROPIETARIO,
+    ]);
 
     $this->actingAs($user)
         ->from(route('language.edit'))
@@ -39,7 +44,9 @@ test('language can be updated to spanish', function () {
 });
 
 test('language update validates allowed locales', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'role' => UserRole::PROPIETARIO,
+    ]);
 
     $this->actingAs($user)
         ->from(route('language.edit'))
@@ -48,4 +55,14 @@ test('language update validates allowed locales', function () {
         ])
         ->assertSessionHasErrors('locale')
         ->assertRedirect(route('language.edit'));
+});
+
+test('cliente cannot access language settings', function () {
+    $user = User::factory()->create([
+        'role' => UserRole::CLIENTE,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('language.edit'))
+        ->assertRedirect(route('home'));
 });

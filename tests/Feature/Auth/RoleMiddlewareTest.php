@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 beforeEach(function () {
     Route::middleware(['web', 'auth', 'role:administrador'])
-    ->get('/testing/admin-only', fn () => 'ok');
+        ->get('/testing/admin-only', fn() => 'ok');
 });
 
 test('administrador can access admin-only routes', function () {
@@ -20,12 +20,12 @@ test('administrador can access admin-only routes', function () {
     $response->assertSee('ok');
 });
 
-test('non administrador is forbidden from admin-only routes', function () {
+test('non administrador is redirected from admin-only routes', function () {
     $client = User::factory()->create([
         'role' => UserRole::CLIENTE,
     ]);
 
     $response = $this->actingAs($client)->get('/testing/admin-only');
 
-    $response->assertForbidden();
+    $response->assertRedirect(route('home'));
 });
