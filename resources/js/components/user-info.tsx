@@ -2,6 +2,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
 import type { User } from '@/types';
 
+const roleLabels: Record<User['role'], string> = {
+    administrador: 'Administrador',
+    propietario: 'Propietario',
+    cliente: 'Cliente',
+};
+
 export function UserInfo({
     user,
     showEmail = false,
@@ -24,6 +30,11 @@ export function UserInfo({
                 {showEmail && (
                     <span className="truncate text-xs text-muted-foreground">
                         {user.email}
+                    </span>
+                )}
+                {!showEmail && (
+                    <span className="truncate text-xs text-muted-foreground">
+                        {roleLabels[user.role]}
                     </span>
                 )}
             </div>

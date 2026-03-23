@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use App\Enums\UserRole;
+use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -46,5 +49,17 @@ class AppServiceProvider extends ServiceProvider
                 ->uncompromised()
             : null,
         );
+
+        Gate::define('manage-system', fn (User $user): bool => $user->isAdministrador());
+
+        Gate::define('manage-property-bookings', fn (User $user): bool => $user->hasAnyRole([
+            UserRole::ADMINISTRADOR,
+            UserRole::PROPIETARIO,
+        ]));
+
+        Gate::define('create-bookings', fn (User $user): bool => $user->hasAnyRole([
+            UserRole::ADMINISTRADOR,
+            UserRole::CLIENTE,
+        ]));
     }
 }
