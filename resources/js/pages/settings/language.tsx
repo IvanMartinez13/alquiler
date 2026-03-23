@@ -5,6 +5,7 @@ import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import ChoicesSelect from '@/components/ui/choices-select';
 import { Label } from '@/components/ui/label';
+import { useTranslations } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import type { BreadcrumbItem } from '@/types';
@@ -21,26 +22,28 @@ type Props = {
     locales: LocaleOption[];
 };
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Language settings',
-        href: edit(),
-    },
-];
-
 export default function Language({ currentLocale, locales }: Props) {
+    const { t } = useTranslations();
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: t('settings.language.breadcrumb'),
+            href: edit(),
+        },
+    ];
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Language settings" />
+            <Head title={t('settings.language.head_title')} />
 
-            <h1 className="sr-only">Language settings</h1>
+            <h1 className="sr-only">{t('settings.language.head_title')}</h1>
 
             <SettingsLayout>
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Language"
-                        description="Choose the language used by your account"
+                        title={t('settings.language.heading_title')}
+                        description={t('settings.language.heading_description')}
                     />
 
                     <Form
@@ -53,7 +56,9 @@ export default function Language({ currentLocale, locales }: Props) {
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
                                 <div className="grid gap-2">
-                                    <Label htmlFor="locale">Language</Label>
+                                    <Label htmlFor="locale">
+                                        {t('settings.language.label')}
+                                    </Label>
                                     <ChoicesSelect
                                         id="locale"
                                         name="locale"
@@ -61,8 +66,10 @@ export default function Language({ currentLocale, locales }: Props) {
                                         defaultValue={currentLocale}
                                         disabled={processing}
                                         searchEnabled
-                                        searchPlaceholderValue="Buscar idioma..."
-                                        noResultsText="No se encontraron resultados"
+                                        searchPlaceholderValue={t(
+                                            'common.search',
+                                        )}
+                                        noResultsText={t('common.no_results')}
                                     />
 
                                     <InputError
@@ -72,7 +79,9 @@ export default function Language({ currentLocale, locales }: Props) {
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <Button disabled={processing}>Save</Button>
+                                    <Button disabled={processing}>
+                                        {t('common.save')}
+                                    </Button>
 
                                     <Transition
                                         show={recentlySuccessful}
@@ -82,7 +91,7 @@ export default function Language({ currentLocale, locales }: Props) {
                                         leaveTo="opacity-0"
                                     >
                                         <p className="text-sm text-neutral-600">
-                                            Saved
+                                            {t('common.saved')}
                                         </p>
                                     </Transition>
                                 </div>
