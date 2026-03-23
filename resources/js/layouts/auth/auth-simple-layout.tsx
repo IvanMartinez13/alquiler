@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import AppLogoIcon from '@/components/app-logo-icon';
+import { useTranslations } from '@/hooks/use-translations';
 import type { AuthLayoutProps } from '@/types';
 import { home } from '@/routes';
 
@@ -8,10 +9,12 @@ export default function AuthSimpleLayout({
     title,
     description,
 }: AuthLayoutProps) {
+    const { t } = useTranslations();
+
     return (
         <div className="relative flex min-h-svh items-center justify-center overflow-hidden bg-background px-4 py-8 md:px-10">
             <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -left-20 top-0 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+                <div className="absolute top-0 -left-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
                 <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-chart-2/15 blur-3xl" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,var(--background)_65%)]" />
             </div>
@@ -29,8 +32,8 @@ export default function AuthSimpleLayout({
                             </Link>
 
                             <div className="space-y-2">
-                                <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                                    Secure Access
+                                <p className="text-[11px] tracking-[0.18em] text-muted-foreground uppercase">
+                                    {t('layout.auth.secure_access')}
                                 </p>
                                 <h1 className="text-2xl font-semibold tracking-tight">
                                     {title}

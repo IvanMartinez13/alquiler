@@ -11,6 +11,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
+import { useTranslations } from '@/hooks/use-translations';
 import AuthLayout from '@/layouts/auth-layout';
 import { register } from '@/routes';
 import { store } from '@/routes/login';
@@ -22,22 +23,32 @@ type Props = {
     canRegister: boolean;
 };
 
-const socialProviders = [
-    { key: 'google', label: 'Continue with Google', icon: FaGoogle },
-    { key: 'facebook', label: 'Continue with Facebook', icon: FaFacebookF },
-] as const;
-
 export default function Login({
     status,
     canResetPassword,
     canRegister,
 }: Props) {
+    const { t } = useTranslations();
+
+    const socialProviders = [
+        {
+            key: 'google',
+            label: t('auth.login.google'),
+            icon: FaGoogle,
+        },
+        {
+            key: 'facebook',
+            label: t('auth.login.facebook'),
+            icon: FaFacebookF,
+        },
+    ] as const;
+
     return (
         <AuthLayout
-            title="Log in to your account"
-            description="Enter your email and password below to log in"
+            title={t('auth.login.title')}
+            description={t('auth.login.description')}
         >
-            <Head title="Log in" />
+            <Head title={t('auth.login.head_title')} />
 
             <Form
                 {...store.form()}
@@ -48,7 +59,9 @@ export default function Login({
                     <>
                         <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">
+                                    {t('common.email_address')}
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -57,7 +70,7 @@ export default function Login({
                                     autoFocus
                                     tabIndex={1}
                                     autoComplete="email"
-                                    placeholder="email@example.com"
+                                    placeholder={t('common.email')}
                                     className="h-11 rounded-xl"
                                 />
                                 <InputError message={errors.email} />
@@ -65,14 +78,16 @@ export default function Login({
 
                             <div className="grid gap-2">
                                 <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                                    <Label htmlFor="password">
+                                        {t('common.password')}
+                                    </Label>
                                     {canResetPassword && (
                                         <TextLink
                                             href={request()}
                                             className="ml-auto text-sm"
                                             tabIndex={5}
                                         >
-                                            Forgot password?
+                                            {t('auth.login.forgot_password')}
                                         </TextLink>
                                     )}
                                 </div>
@@ -82,7 +97,7 @@ export default function Login({
                                     required
                                     tabIndex={2}
                                     autoComplete="current-password"
-                                    placeholder="Password"
+                                    placeholder={t('common.password')}
                                     className="h-11 rounded-xl"
                                 />
                                 <InputError message={errors.password} />
@@ -94,7 +109,9 @@ export default function Login({
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember">
+                                    {t('auth.login.remember_me')}
+                                </Label>
                             </div>
 
                             <Button
@@ -105,15 +122,15 @@ export default function Login({
                                 data-test="login-button"
                             >
                                 {processing && <Spinner />}
-                                Log in
+                                {t('auth.login.submit')}
                             </Button>
                         </div>
 
                         {canRegister && (
                             <div className="text-center text-sm text-muted-foreground">
-                                Don't have an account?{' '}
+                                {t('auth.login.no_account')}{' '}
                                 <TextLink href={register()} tabIndex={5}>
-                                    Sign up
+                                    {t('auth.login.sign_up')}
                                 </TextLink>
                             </div>
                         )}
@@ -122,7 +139,7 @@ export default function Login({
             </Form>
 
             <div className="space-y-4">
-                <AuthDivider label="Or continue with" />
+                <AuthDivider label={t('auth.login.or_continue_with')} />
 
                 <div className="grid gap-2">
                     {socialProviders.map((provider) => (
@@ -137,9 +154,7 @@ export default function Login({
             </div>
 
             {status && (
-                <AuthStatus className="text-center">
-                    {status}
-                </AuthStatus>
+                <AuthStatus className="text-center">{status}</AuthStatus>
             )}
         </AuthLayout>
     );

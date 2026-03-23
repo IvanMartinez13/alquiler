@@ -3,6 +3,7 @@
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use App\Http\Controllers\Settings\SocialAccountController;
+use App\Http\Controllers\Settings\LanguageController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->group(function () {
@@ -13,6 +14,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('settings/social-accounts', [SocialAccountController::class, 'edit'])
         ->name('social-accounts.edit');
+
+    Route::get('settings/language', [LanguageController::class, 'edit'])
+        ->name('language.edit');
+
+    Route::patch('settings/language', [LanguageController::class, 'update'])
+        ->name('language.update');
 
     Route::get('settings/social-accounts/{provider}/redirect', [SocialAccountController::class, 'redirect'])
         ->whereIn('provider', ['google', 'facebook'])
