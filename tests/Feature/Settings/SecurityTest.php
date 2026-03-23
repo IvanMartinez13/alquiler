@@ -18,10 +18,12 @@ test('security page is displayed', function () {
     $this->actingAs($user)
         ->withSession(['auth.password_confirmed_at' => time()])
         ->get(route('security.edit'))
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('settings/security')
-            ->where('canManageTwoFactor', true)
-            ->where('twoFactorEnabled', false),
+        ->assertInertia(
+            fn(Assert $page) => $page
+                ->component('settings/security')
+                ->where('canManageTwoFactor', true)
+                ->where('hasPassword', true)
+                ->where('twoFactorEnabled', false),
         );
 });
 
@@ -54,8 +56,30 @@ test('security page does not require password confirmation when disabled', funct
     $this->actingAs($user)
         ->get(route('security.edit'))
         ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('settings/security'),
+        ->assertInertia(
+            fn(Assert $page) => $page
+                ->component('settings/security'),
+        );
+});
+
+test('security page does not require password confirmation for users authenticated via social provider', function () {
+    $this->skipUnlessFortifyFeature(Features::twoFactorAuthentication());
+
+    $user = User::factory()->create();
+
+    Features::twoFactorAuthentication([
+        'confirm' => true,
+        'confirmPassword' => true,
+    ]);
+
+    $this->actingAs($user)
+        ->withSession(['authenticated_via_social' => true])
+        ->get(route('security.edit'))
+        ->assertOk()
+        ->assertInertia(
+            fn(Assert $page) => $page
+                ->component('settings/security')
+                ->where('hasPassword', false),
         );
 });
 
@@ -69,11 +93,12 @@ test('security page renders without two factor when feature is disabled', functi
     $this->actingAs($user)
         ->get(route('security.edit'))
         ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('settings/security')
-            ->where('canManageTwoFactor', false)
-            ->missing('twoFactorEnabled')
-            ->missing('requiresConfirmation'),
+        ->assertInertia(
+            fn(Assert $page) => $page
+                ->component('settings/security')
+                ->where('canManageTwoFactor', false)
+                ->missing('twoFactorEnabled')
+                ->missing('requiresConfirmation'),
         );
 });
 
@@ -111,4 +136,23 @@ test('correct password must be provided to update password', function () {
     $response
         ->assertSessionHasErrors('current_password')
         ->assertRedirect(route('security.edit'));
+});
+
+test('password can be set without current password for users authenticated via social provider', function () {
+    $user = User::factory()->create();
+
+    $response = $this
+        ->actingAs($user)
+        ->withSession(['authenticated_via_social' => true])
+        ->from(route('security.edit'))
+        ->put(route('user-password.update'), [
+            'password' => 'new-password',
+            'password_confirmation' => 'new-password',
+        ]);
+
+    $response
+        ->assertSessionHasNoErrors()
+        ->assertRedirect(route('security.edit'));
+
+    expect(Hash::check('new-password', $user->refresh()->password))->toBeTrue();
 });

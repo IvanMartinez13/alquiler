@@ -106,6 +106,7 @@ class SocialAuthController extends Controller
         );
 
         Auth::login($user, remember: true);
+        $request->session()->put('authenticated_via_social', true);
 
         return redirect()->intended(route('dashboard'));
     }

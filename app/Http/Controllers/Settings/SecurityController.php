@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\RequirePasswordIfSet;
 use App\Http\Requests\Settings\PasswordUpdateRequest;
 use App\Http\Requests\Settings\TwoFactorAuthenticationRequest;
 use Illuminate\Http\RedirectResponse;
@@ -21,8 +22,8 @@ class SecurityController extends Controller implements HasMiddleware
     {
         return Features::canManageTwoFactorAuthentication()
             && Features::optionEnabled(Features::twoFactorAuthentication(), 'confirmPassword')
-                ? [new Middleware('password.confirm', only: ['edit'])]
-                : [];
+            ? [new Middleware(RequirePasswordIfSet::class, only: ['edit'])]
+            : [];
     }
 
     /**
@@ -32,6 +33,7 @@ class SecurityController extends Controller implements HasMiddleware
     {
         $props = [
             'canManageTwoFactor' => Features::canManageTwoFactorAuthentication(),
+            'hasPassword' => ! (bool) $request->session()->get('authenticated_via_social', false),
         ];
 
         if (Features::canManageTwoFactorAuthentication()) {
@@ -52,6 +54,8 @@ class SecurityController extends Controller implements HasMiddleware
         $request->user()->update([
             'password' => $request->password,
         ]);
+
+        $request->session()->forget('authenticated_via_social');
 
         return back();
     }

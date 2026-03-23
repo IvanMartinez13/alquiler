@@ -2,7 +2,6 @@ import { Transition } from '@headlessui/react';
 import { Form, Head } from '@inertiajs/react';
 import { ShieldCheck } from 'lucide-react';
 import { useRef, useState } from 'react';
-import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
@@ -13,12 +12,14 @@ import { Label } from '@/components/ui/label';
 import { useTwoFactorAuth } from '@/hooks/use-two-factor-auth';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import type { BreadcrumbItem } from '@/types';
+import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import { edit } from '@/routes/security';
 import { disable, enable } from '@/routes/two-factor';
-import type { BreadcrumbItem } from '@/types';
 
 type Props = {
     canManageTwoFactor?: boolean;
+    hasPassword?: boolean;
     requiresConfirmation?: boolean;
     twoFactorEnabled?: boolean;
 };
@@ -32,6 +33,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Security({
     canManageTwoFactor = false,
+    hasPassword = true,
     requiresConfirmation = false,
     twoFactorEnabled = false,
 }: Props) {
@@ -72,7 +74,7 @@ export default function Security({
                         resetOnError={[
                             'password',
                             'password_confirmation',
-                            'current_password',
+                            ...(hasPassword ? ['current_password'] : []),
                         ]}
                         resetOnSuccess
                         onError={(errors) => {
@@ -80,7 +82,7 @@ export default function Security({
                                 passwordInput.current?.focus();
                             }
 
-                            if (errors.current_password) {
+                            if (hasPassword && errors.current_password) {
                                 currentPasswordInput.current?.focus();
                             }
                         }}
@@ -88,24 +90,26 @@ export default function Security({
                     >
                         {({ errors, processing, recentlySuccessful }) => (
                             <>
-                                <div className="grid gap-2">
-                                    <Label htmlFor="current_password">
-                                        Current password
-                                    </Label>
+                                {hasPassword && (
+                                    <div className="grid gap-2">
+                                        <Label htmlFor="current_password">
+                                            Current password
+                                        </Label>
 
-                                    <PasswordInput
-                                        id="current_password"
-                                        ref={currentPasswordInput}
-                                        name="current_password"
-                                        className="mt-1 block w-full"
-                                        autoComplete="current-password"
-                                        placeholder="Current password"
-                                    />
+                                        <PasswordInput
+                                            id="current_password"
+                                            ref={currentPasswordInput}
+                                            name="current_password"
+                                            className="mt-1 block w-full"
+                                            autoComplete="current-password"
+                                            placeholder="Current password"
+                                        />
 
-                                    <InputError
-                                        message={errors.current_password}
-                                    />
-                                </div>
+                                        <InputError
+                                            message={errors.current_password}
+                                        />
+                                    </div>
+                                )}
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="password">
