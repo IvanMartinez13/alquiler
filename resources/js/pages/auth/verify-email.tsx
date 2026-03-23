@@ -1,5 +1,6 @@
 // Components
 import { Form, Head } from '@inertiajs/react';
+import AuthStatus from '@/components/auth/auth-status';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
@@ -16,16 +17,20 @@ export default function VerifyEmail({ status }: { status?: string }) {
             <Head title="Email verification" />
 
             {status === 'verification-link-sent' && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
+                <AuthStatus className="mb-2 text-center" variant="info">
                     A new verification link has been sent to the email address
                     you provided during registration.
-                </div>
+                </AuthStatus>
             )}
 
             <Form {...send.form()} className="space-y-6 text-center">
                 {({ processing }) => (
                     <>
-                        <Button disabled={processing} variant="secondary">
+                        <Button
+                            disabled={processing}
+                            variant="secondary"
+                            className="h-11 rounded-xl"
+                        >
                             {processing && <Spinner />}
                             Resend verification email
                         </Button>
