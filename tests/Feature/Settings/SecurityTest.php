@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -14,6 +15,7 @@ test('security page is displayed', function () {
     ]);
 
     $user = User::factory()->create();
+    $user->forceFill(['role' => UserRole::PROPIETARIO])->save();
 
     $this->actingAs($user)
         ->withSession(['auth.password_confirmed_at' => time()])
@@ -31,6 +33,7 @@ test('security page requires password confirmation when enabled', function () {
     $this->skipUnlessFortifyFeature(Features::twoFactorAuthentication());
 
     $user = User::factory()->create();
+    $user->forceFill(['role' => UserRole::PROPIETARIO])->save();
 
     Features::twoFactorAuthentication([
         'confirm' => true,
@@ -47,6 +50,7 @@ test('security page does not require password confirmation when disabled', funct
     $this->skipUnlessFortifyFeature(Features::twoFactorAuthentication());
 
     $user = User::factory()->create();
+    $user->forceFill(['role' => UserRole::PROPIETARIO])->save();
 
     Features::twoFactorAuthentication([
         'confirm' => true,
@@ -66,6 +70,7 @@ test('security page does not require password confirmation for users authenticat
     $this->skipUnlessFortifyFeature(Features::twoFactorAuthentication());
 
     $user = User::factory()->create();
+    $user->forceFill(['role' => UserRole::PROPIETARIO])->save();
 
     Features::twoFactorAuthentication([
         'confirm' => true,
@@ -89,6 +94,7 @@ test('security page renders without two factor when feature is disabled', functi
     config(['fortify.features' => []]);
 
     $user = User::factory()->create();
+    $user->forceFill(['role' => UserRole::PROPIETARIO])->save();
 
     $this->actingAs($user)
         ->get(route('security.edit'))
@@ -104,6 +110,7 @@ test('security page renders without two factor when feature is disabled', functi
 
 test('password can be updated', function () {
     $user = User::factory()->create();
+    $user->forceFill(['role' => UserRole::PROPIETARIO])->save();
 
     $response = $this
         ->actingAs($user)
@@ -123,6 +130,7 @@ test('password can be updated', function () {
 
 test('correct password must be provided to update password', function () {
     $user = User::factory()->create();
+    $user->forceFill(['role' => UserRole::PROPIETARIO])->save();
 
     $response = $this
         ->actingAs($user)
@@ -140,6 +148,7 @@ test('correct password must be provided to update password', function () {
 
 test('password can be set without current password for users authenticated via social provider', function () {
     $user = User::factory()->create();
+    $user->forceFill(['role' => UserRole::PROPIETARIO])->save();
 
     $response = $this
         ->actingAs($user)

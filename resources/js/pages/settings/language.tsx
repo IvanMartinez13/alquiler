@@ -1,5 +1,6 @@
 import { Transition } from '@headlessui/react';
 import { Form, Head } from '@inertiajs/react';
+import LanguageController from '@/actions/App/Http/Controllers/Settings/LanguageController';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -8,9 +9,8 @@ import { Label } from '@/components/ui/label';
 import { useTranslations } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import type { BreadcrumbItem } from '@/types';
-import LanguageController from '@/actions/App/Http/Controllers/Settings/LanguageController';
 import { edit } from '@/routes/language';
+import type { BreadcrumbItem } from '@/types';
 
 type LocaleOption = {
     value: string;

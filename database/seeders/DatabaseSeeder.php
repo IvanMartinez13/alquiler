@@ -16,22 +16,9 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Administrador Demo',
-            'email' => 'admin@example.com',
-            'role' => UserRole::ADMINISTRADOR,
-        ]);
 
-        User::factory()->create([
-            'name' => 'Propietario Demo',
-            'email' => 'propietario@example.com',
-            'role' => UserRole::PROPIETARIO,
-        ]);
-
-        User::factory()->create([
-            'name' => 'Cliente Demo',
-            'email' => 'cliente@example.com',
-            'role' => UserRole::CLIENTE,
+        $this->call([
+            AmenitySeeder::class,
         ]);
     }
 }

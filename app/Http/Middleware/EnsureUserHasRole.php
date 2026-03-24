@@ -27,11 +27,15 @@ class EnsureUserHasRole
         }
 
         $allowedRoles = array_map(
-            static fn (string $role): string => UserRole::from($role)->value,
+            static fn(string $role): string => UserRole::from($role)->value,
             $roles,
         );
 
         if (! in_array($user->role->value, $allowedRoles, true)) {
+            if (! $request->expectsJson()) {
+                return redirect()->route('home');
+            }
+
             abort(Response::HTTP_FORBIDDEN);
         }
 

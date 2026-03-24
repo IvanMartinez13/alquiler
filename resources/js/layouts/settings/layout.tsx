@@ -3,14 +3,14 @@ import type { PropsWithChildren } from 'react';
 import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { useTranslations } from '@/hooks/use-translations';
 import { useCurrentUrl } from '@/hooks/use-current-url';
+import { useTranslations } from '@/hooks/use-translations';
 import { cn, toUrl } from '@/lib/utils';
-import type { NavItem } from '@/types';
 import { edit as editAppearance } from '@/routes/appearance';
 import { edit as editLanguage } from '@/routes/language';
 import { edit } from '@/routes/profile';
 import { edit as editSecurity } from '@/routes/security';
+import type { NavItem } from '@/types';
 
 export default function SettingsLayout({ children }: PropsWithChildren) {
     const { t } = useTranslations();

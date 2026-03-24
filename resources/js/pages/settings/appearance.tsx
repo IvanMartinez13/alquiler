@@ -4,8 +4,8 @@ import Heading from '@/components/heading';
 import { useTranslations } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import type { BreadcrumbItem } from '@/types';
 import { edit as editAppearance } from '@/routes/appearance';
+import type { BreadcrumbItem } from '@/types';
 
 export default function Appearance() {
     const { t } = useTranslations();

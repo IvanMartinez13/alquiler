@@ -6,9 +6,9 @@ use App\Models\UserSocialAccount;
 use Laravel\Socialite\Contracts\Provider;
 use Laravel\Socialite\Facades\Socialite;
 
-test('social accounts settings page is displayed', function () {
+test('social accounts settings page is displayed for propietario', function () {
     $user = User::factory()->create([
-        'role' => UserRole::CLIENTE,
+        'role' => UserRole::PROPIETARIO,
     ]);
 
     $this->actingAs($user)
@@ -16,8 +16,20 @@ test('social accounts settings page is displayed', function () {
         ->assertOk();
 });
 
+test('cliente cannot access social accounts settings page', function () {
+    $user = User::factory()->create([
+        'role' => UserRole::CLIENTE,
+    ]);
+
+    $this->actingAs($user)
+        ->get(route('social-accounts.edit'))
+        ->assertRedirect(route('home'));
+});
+
 test('authenticated user can unlink a provider', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'role' => UserRole::PROPIETARIO,
+    ]);
 
     UserSocialAccount::query()->create([
         'user_id' => $user->id,
@@ -38,7 +50,9 @@ test('authenticated user can unlink a provider', function () {
 });
 
 test('social callback links provider to authenticated user from settings flow', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create([
+        'role' => UserRole::PROPIETARIO,
+    ]);
 
     $provider = \Mockery::mock(Provider::class);
     $socialiteUser = \Mockery::mock(\Laravel\Socialite\Contracts\User::class);
