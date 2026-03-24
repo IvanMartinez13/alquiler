@@ -28,6 +28,7 @@ type PropertyPayload = {
     max_guests: number;
     bedrooms: number;
     beds: number;
+    single_beds: number;
     bathrooms: number;
     check_in_time: string;
     check_out_time: string;
@@ -96,7 +97,8 @@ export default function ShowProperty({ property }: Props) {
                         <ul className="space-y-1 text-sm text-muted-foreground">
                             <li>Guests: {property.max_guests}</li>
                             <li>Bedrooms: {property.bedrooms}</li>
-                            <li>Beds: {property.beds}</li>
+                            <li>Double beds: {property.beds}</li>
+                            <li>Single beds: {property.single_beds}</li>
                             <li>Bathrooms: {property.bathrooms}</li>
                             <li>Check in: {property.check_in_time}</li>
                             <li>Check out: {property.check_out_time}</li>

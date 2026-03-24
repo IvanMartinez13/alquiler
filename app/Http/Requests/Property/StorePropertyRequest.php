@@ -10,6 +10,14 @@ use Illuminate\Validation\Rule;
 
 class StorePropertyRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'latitude' => $this->normalizeCoordinate($this->input('latitude')),
+            'longitude' => $this->normalizeCoordinate($this->input('longitude')),
+        ]);
+    }
+
     public function authorize(): bool
     {
         return $this->user()?->can('create', Property::class) ?? false;
@@ -33,7 +41,8 @@ class StorePropertyRequest extends FormRequest
             'type' => ['required', Rule::enum(PropertyType::class)],
             'max_guests' => ['required', 'integer', 'min:1', 'max:100'],
             'bedrooms' => ['required', 'integer', 'min:0', 'max:100'],
-            'beds' => ['required', 'integer', 'min:1', 'max:200'],
+            'beds' => ['required', 'integer', 'min:0', 'max:200'],
+            'single_beds' => ['required', 'integer', 'min:0', 'max:200'],
             'bathrooms' => ['required', 'integer', 'min:1', 'max:100'],
             'check_in_time' => ['required', 'date_format:H:i'],
             'check_out_time' => ['required', 'date_format:H:i'],
@@ -41,8 +50,10 @@ class StorePropertyRequest extends FormRequest
             'status' => ['required', Rule::enum(PropertyStatus::class)],
             'amenities' => ['nullable', 'array'],
             'amenities.*' => ['integer', 'exists:amenities,id'],
+            'source_locale' => ['nullable', 'string', 'in:es,en,de'],
             'images' => ['nullable', 'array'],
             'images.*' => ['image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+            'favorite_upload_index' => ['nullable', 'integer', 'min:0'],
             'house_rules' => ['nullable', 'array'],
             'house_rules.check_in' => ['nullable', 'string', 'max:255'],
             'house_rules.check_out' => ['nullable', 'string', 'max:255'],
@@ -50,8 +61,20 @@ class StorePropertyRequest extends FormRequest
             'house_rules.damage_deposit' => ['nullable', 'string', 'max:255'],
             'house_rules.children_policy' => ['nullable', 'string', 'max:1000'],
             'house_rules.age_restriction' => ['nullable', 'string', 'max:255'],
+            'house_rules.free_cancellation' => ['nullable', 'boolean'],
             'house_rules.smoking_allowed' => ['nullable', 'boolean'],
             'house_rules.pets_allowed' => ['nullable', 'boolean'],
         ];
+    }
+
+    private function normalizeCoordinate(mixed $value): mixed
+    {
+        if (! is_string($value)) {
+            return $value;
+        }
+
+        $normalized = str_replace(',', '.', trim($value));
+
+        return $normalized !== '' ? $normalized : null;
     }
 }

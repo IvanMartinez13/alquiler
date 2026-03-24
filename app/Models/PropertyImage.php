@@ -11,8 +11,36 @@ class PropertyImage extends Model
         'property_id',
         'path',
         'alt',
+        'alt_translations',
         'sort_order',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'alt_translations' => 'array',
+        ];
+    }
+
+    public function getLocalizedAlt(?string $locale = null): ?string
+    {
+        $translations = $this->alt_translations;
+
+        if (! is_array($translations) || $translations === []) {
+            return $this->alt;
+        }
+
+        $locale = strtolower($locale ?? app()->getLocale());
+        $fallback = strtolower((string) config('app.fallback_locale', 'en'));
+
+        $value = (string) ($translations[$locale]
+            ?? $translations[$fallback]
+            ?? reset($translations)
+            ?? $this->alt
+            ?? '');
+
+        return $value !== '' ? $value : null;
+    }
 
     public function property(): BelongsTo
     {

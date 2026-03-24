@@ -24,6 +24,7 @@ function propertyPayload(array $overrides = []): array
         'max_guests' => 4,
         'bedrooms' => 2,
         'beds' => 2,
+        'single_beds' => 0,
         'bathrooms' => 1,
         'check_in_time' => '15:00',
         'check_out_time' => '11:00',

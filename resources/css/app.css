@@ -1,3 +1,4 @@
+@import '@fortawesome/fontawesome-free/css/all.min.css';
 @import 'tailwindcss';
 
 @import 'tw-animate-css';
@@ -149,6 +150,7 @@
         --choices-bg-color-dropdown: var(--popover);
         --choices-bg-color-disabled: var(--muted);
         --choices-text-color: var(--foreground);
+        --choices-item-disabled-color: var(--muted-foreground);
         --choices-keyline-color: var(--input);
         --choices-highlighted-color: var(--accent);
         --choices-font-size-md: 0.875rem;
@@ -206,5 +208,9 @@
 
     .choices.choices-tailwind.is-disabled .choices__inner {
         @apply cursor-not-allowed opacity-50;
+    }
+
+    .choices.choices-tailwind.is-disabled .choices__item {
+        @apply text-muted-foreground;
     }
 }

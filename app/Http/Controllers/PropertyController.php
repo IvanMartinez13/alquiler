@@ -20,30 +20,57 @@ class PropertyController extends Controller
         $this->authorize('viewAny', Property::class);
 
         $ownerId = request()->user()->getAuthIdentifier();
+        $locale = app()->getLocale();
+        $amenityOptions = Amenity::query()
+            ->where('is_active', true)
+            ->orderBy('code')
+            ->get(['id', 'name', 'icon'])
+            ->map(fn(Amenity $amenity): array => [
+                'id' => $amenity->id,
+                'name' => $amenity->getLocalizedName($locale),
+                'icon' => $amenity->icon,
+            ])
+            ->values()
+            ->all();
 
         $properties = Property::query()
             ->ownedBy($ownerId)
             ->with(['amenities', 'images'])
             ->latest()
-            ->paginate(9)
-            ->withQueryString()
-            ->through(fn(Property $property): array => [
+            ->get()
+            ->map(fn(Property $property): array => [
                 'id' => $property->id,
-                'title' => $property->title,
+                'title' => $property->getLocalizedTitle($locale),
                 'slug' => $property->slug,
-                'city' => $property->city,
-                'country' => $property->country,
+                'description' => $property->getLocalizedDescription($locale),
+                'address' => $property->getLocalizedAddress($locale),
+                'city' => $property->getLocalizedCity($locale),
+                'country' => $property->getLocalizedCountry($locale),
                 'type' => $property->type,
                 'status' => $property->status->value,
                 'max_guests' => $property->max_guests,
-                'cover_image_url' => $property->images->first()
+                'bedrooms' => $property->bedrooms,
+                'beds' => $property->beds,
+                'single_beds' => $property->single_beds,
+                'bathrooms' => $property->bathrooms,
+                'check_in_time' => $property->check_in_time,
+                'check_out_time' => $property->check_out_time,
+                'free_cancellation' => (bool) data_get($property->house_rules, 'free_cancellation', false),
+                'favorite_image_url' => $property->images->first()
                     ? asset('storage/' . $property->images->first()->path)
                     : null,
+                'favorite_image_alt' => $property->images->first()?->getLocalizedAlt($locale),
+                'amenity_ids' => $property->amenities->pluck('id')->all(),
+                'amenities' => $property->amenities
+                    ->map(fn(Amenity $amenity): string => $amenity->getLocalizedName($locale))
+                    ->values(),
                 'amenities_count' => $property->amenities->count(),
-            ]);
+            ])
+            ->values();
 
         return Inertia::render('properties/index', [
             'properties' => $properties,
+            'amenities' => $amenityOptions,
         ]);
     }
 
@@ -90,23 +117,24 @@ class PropertyController extends Controller
         return Inertia::render('properties/show', [
             'property' => [
                 'id' => $property->id,
-                'title' => $property->title,
+                'title' => $property->getLocalizedTitle($locale),
                 'slug' => $property->slug,
-                'description' => $property->description,
-                'address' => $property->address,
-                'city' => $property->city,
-                'country' => $property->country,
+                'description' => $property->getLocalizedDescription($locale),
+                'address' => $property->getLocalizedAddress($locale),
+                'city' => $property->getLocalizedCity($locale),
+                'country' => $property->getLocalizedCountry($locale),
                 'latitude' => $property->latitude,
                 'longitude' => $property->longitude,
                 'type' => $property->type,
                 'max_guests' => $property->max_guests,
                 'bedrooms' => $property->bedrooms,
                 'beds' => $property->beds,
+                'single_beds' => $property->single_beds,
                 'bathrooms' => $property->bathrooms,
                 'check_in_time' => $property->check_in_time,
                 'check_out_time' => $property->check_out_time,
-                'notes' => $property->notes,
-                'house_rules' => $property->house_rules,
+                'notes' => $property->getLocalizedNotes($locale),
+                'house_rules' => $property->getLocalizedHouseRules($locale),
                 'status' => $property->status->value,
                 'amenities' => $property->amenities->map(fn($amenity): array => [
                     'id' => $amenity->id,
@@ -116,7 +144,7 @@ class PropertyController extends Controller
                 'images' => $property->images->map(fn($image): array => [
                     'id' => $image->id,
                     'url' => asset('storage/' . $image->path),
-                    'alt' => $image->alt,
+                    'alt' => $image->getLocalizedAlt($locale),
                     'sort_order' => $image->sort_order,
                 ])->values(),
             ],
@@ -133,29 +161,30 @@ class PropertyController extends Controller
         return Inertia::render('properties/edit', [
             'property' => [
                 'id' => $property->id,
-                'title' => $property->title,
+                'title' => $property->getLocalizedTitle($locale),
                 'slug' => $property->slug,
-                'description' => $property->description,
-                'address' => $property->address,
-                'city' => $property->city,
-                'country' => $property->country,
+                'description' => $property->getLocalizedDescription($locale),
+                'address' => $property->getLocalizedAddress($locale),
+                'city' => $property->getLocalizedCity($locale),
+                'country' => $property->getLocalizedCountry($locale),
                 'latitude' => $property->latitude,
                 'longitude' => $property->longitude,
                 'type' => $property->type,
                 'max_guests' => $property->max_guests,
                 'bedrooms' => $property->bedrooms,
                 'beds' => $property->beds,
+                'single_beds' => $property->single_beds,
                 'bathrooms' => $property->bathrooms,
                 'check_in_time' => $property->check_in_time,
                 'check_out_time' => $property->check_out_time,
-                'notes' => $property->notes,
-                'house_rules' => $property->house_rules,
+                'notes' => $property->getLocalizedNotes($locale),
+                'house_rules' => $property->getLocalizedHouseRules($locale),
                 'status' => $property->status->value,
                 'amenity_ids' => $property->amenities->pluck('id')->all(),
                 'images' => $property->images->map(fn($image): array => [
                     'id' => $image->id,
                     'url' => asset('storage/' . $image->path),
-                    'alt' => $image->alt,
+                    'alt' => $image->getLocalizedAlt($locale),
                     'sort_order' => $image->sort_order,
                 ])->values(),
             ],

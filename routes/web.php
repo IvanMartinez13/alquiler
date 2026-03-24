@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\PropertyGeocodingController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 
@@ -48,6 +49,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::middleware('role:propietario')->group(function () {
+        Route::get('properties/geocode', PropertyGeocodingController::class)
+            ->name('properties.geocode');
+
         Route::resource('properties', PropertyController::class);
     });
 });

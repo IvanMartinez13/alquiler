@@ -1,6 +1,7 @@
 import Choices from 'choices.js';
 import 'choices.js/public/assets/styles/choices.min.css';
 import {
+    type ChangeEventHandler,
     forwardRef,
     useEffect,
     useImperativeHandle,
@@ -12,6 +13,7 @@ type ChoiceOption = {
     value: string;
     label: string;
     disabled?: boolean;
+    customProperties?: Record<string, unknown>;
 };
 
 type ChoicesSelectProps = {
@@ -23,10 +25,12 @@ type ChoicesSelectProps = {
     multiple?: boolean;
     disabled?: boolean;
     searchEnabled?: boolean;
+    allowHTML?: boolean;
     searchPlaceholderValue?: string;
     noResultsText?: string;
     noChoicesText?: string;
     className?: string;
+    onChange?: ChangeEventHandler<HTMLSelectElement>;
 };
 
 const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
@@ -40,14 +44,17 @@ const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
             multiple = false,
             disabled = false,
             searchEnabled = false,
+            allowHTML = false,
             searchPlaceholderValue = 'Search...',
             noResultsText = 'No results found',
             noChoicesText = 'No options available',
             className,
+            onChange,
         },
         ref,
     ) => {
         const selectRef = useRef<HTMLSelectElement>(null);
+        const instanceRef = useRef<Choices | null>(null);
 
         useImperativeHandle(ref, () => selectRef.current as HTMLSelectElement);
 
@@ -60,6 +67,7 @@ const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
                         ? (defaultValues ?? []).includes(option.value)
                         : option.value === defaultValue,
                     disabled: option.disabled ?? false,
+                    customProperties: option.customProperties,
                 })),
             [options, defaultValue, defaultValues, multiple],
         );
@@ -69,8 +77,16 @@ const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
                 return;
             }
 
+            if (instanceRef.current) {
+                instanceRef.current.destroy();
+                instanceRef.current = null;
+            }
+
+            // Ensure there are no stale native options before rebuilding Choices.
+            selectRef.current.innerHTML = '';
+
             const instance = new Choices(selectRef.current, {
-                allowHTML: false,
+                allowHTML,
                 searchEnabled,
                 searchPlaceholderValue,
                 noResultsText,
@@ -82,13 +98,19 @@ const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
             });
 
             instance.containerOuter.element.classList.add('choices-tailwind');
+            instanceRef.current = instance;
 
             return () => {
                 instance.destroy();
+
+                if (instanceRef.current === instance) {
+                    instanceRef.current = null;
+                }
             };
         }, [
             choicesData,
             searchEnabled,
+            allowHTML,
             searchPlaceholderValue,
             noResultsText,
             noChoicesText,
@@ -103,6 +125,7 @@ const ChoicesSelect = forwardRef<HTMLSelectElement, ChoicesSelectProps>(
                 multiple={multiple}
                 disabled={disabled}
                 className={className}
+                onChange={onChange}
             />
         );
     },

@@ -36,6 +36,13 @@ class UpdatePropertyRequest extends StorePropertyRequest
                     fn($query) => $query->where('property_id', $this->route('property')->id),
                 ),
             ],
+            'favorite_image_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('property_images', 'id')->where(
+                    fn($query) => $query->where('property_id', $this->route('property')->id),
+                ),
+            ],
         ];
     }
 }

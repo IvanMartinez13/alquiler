@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import { useTranslations } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import PropertyForm from '@/pages/properties/partials/property-form';
 import type { BreadcrumbItem } from '@/types';
@@ -14,27 +15,36 @@ type Props = {
 };
 
 export default function CreateProperty({ amenities }: Props) {
+    const { t } = useTranslations();
+
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Properties', href: '/properties' },
-        { title: 'Create', href: '/properties/create' },
+        { title: t('layout.sidebar.properties', 'Properties'), href: '/properties' },
+        { title: t('properties.form.create', 'Create'), href: '/properties/create' },
     ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create property" />
+            <Head title={t('properties.form.create_property', 'Create property')} />
 
             <div className="mx-auto max-w-5xl space-y-6 p-4">
                 <div>
-                    <h1 className="text-2xl font-semibold">Create property</h1>
+                    <h1 className="text-2xl font-semibold">
+                        {t('properties.form.create_property', 'Create property')}
+                    </h1>
                     <p className="text-sm text-muted-foreground">
-                        Add core details, amenities and images.
+                        {t(
+                            'properties.form.create_description',
+                            'Complete the form step by step to publish your property.',
+                        )}
                     </p>
                 </div>
 
                 <PropertyForm
                     action="/properties"
                     method="post"
-                    submitLabel="Create property"
+                    submitLabel={
+                        t('properties.form.create_property', 'Create property')
+                    }
                     amenities={amenities}
                 />
             </div>

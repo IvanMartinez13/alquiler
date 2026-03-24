@@ -66,4 +66,8 @@ return [
         ],
     ],
 
+    'geocoding' => [
+        'endpoint' => env('GEOCODING_API_URL', 'https://nominatim.openstreetmap.org/search'),
+    ],
+
 ];

@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import { useTranslations } from '@/hooks/use-translations';
 import AppLayout from '@/layouts/app-layout';
 import PropertyForm from '@/pages/properties/partials/property-form';
 import type { BreadcrumbItem } from '@/types';
@@ -30,6 +31,7 @@ type PropertyPayload = {
     max_guests: number;
     bedrooms: number;
     beds: number;
+    single_beds: number;
     bathrooms: number;
     check_in_time: string;
     check_out_time: string;
@@ -55,27 +57,36 @@ type Props = {
 };
 
 export default function EditProperty({ property, amenities }: Props) {
+    const { t } = useTranslations();
+
     const breadcrumbs: BreadcrumbItem[] = [
-        { title: 'Properties', href: '/properties' },
+        { title: t('layout.sidebar.properties', 'Properties'), href: '/properties' },
         { title: property.title, href: `/properties/${property.slug}/edit` },
     ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Edit ${property.title}`} />
+            <Head
+                title={t('properties.form.edit_property', 'Edit property')}
+            />
 
             <div className="mx-auto max-w-5xl space-y-6 p-4">
                 <div>
-                    <h1 className="text-2xl font-semibold">Edit property</h1>
+                    <h1 className="text-2xl font-semibold">
+                        {t('properties.form.edit_property', 'Edit property')}
+                    </h1>
                     <p className="text-sm text-muted-foreground">
-                        Update listing details and media.
+                        {t(
+                            'properties.form.edit_description',
+                            'Update each section and save your changes.',
+                        )}
                     </p>
                 </div>
 
                 <PropertyForm
                     action={`/properties/${property.slug}`}
                     method="put"
-                    submitLabel="Save changes"
+                    submitLabel={t('properties.form.save_changes', 'Save changes')}
                     property={property}
                     amenities={amenities}
                 />

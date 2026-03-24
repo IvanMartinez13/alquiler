@@ -47,11 +47,13 @@ class AmenityController extends Controller
                 'name' => $this->translationService->translateToLocales(
                     text: (string) ($validated['name'] ?? ''),
                     sourceLocale: $sourceLocale,
+                    targetLocales: $this->targetLocales(),
                 ),
                 'description' => filled($validated['description'] ?? null)
                     ? $this->translationService->translateToLocales(
                         text: (string) $validated['description'],
                         sourceLocale: $sourceLocale,
+                        targetLocales: $this->targetLocales(),
                     )
                     : null,
             ],
@@ -64,21 +66,36 @@ class AmenityController extends Controller
     {
         $sourceLocale = $request->input('source_locale', $request->user()?->locale ?? app()->getLocale());
         $validated = $request->validated();
+        $translatedUpdates = [];
+
+        $nextName = (string) ($validated['name'] ?? '');
+
+        if (! $this->isSameText($nextName, $amenity->getLocalizedName($sourceLocale))) {
+            $translatedUpdates['name'] = $this->translationService->translateToLocales(
+                text: $nextName,
+                sourceLocale: $sourceLocale,
+                targetLocales: $this->targetLocales(),
+            );
+        }
+
+        $nextDescription = (string) ($validated['description'] ?? '');
+        $currentDescription = $amenity->getLocalizedDescription($sourceLocale) ?? '';
+
+        if (! $this->isSameText($nextDescription, $currentDescription)) {
+            $translatedUpdates['description'] = trim($nextDescription) !== ''
+                ? $this->translationService->translateToLocales(
+                    text: $nextDescription,
+                    sourceLocale: $sourceLocale,
+                    targetLocales: $this->targetLocales(),
+                )
+                : null;
+        }
 
         $amenity->update(
             [
                 ...array_diff_key($validated, array_flip(['name', 'description', 'source_locale'])),
                 'code' => $amenity->code,
-                'name' => $this->translationService->translateToLocales(
-                    text: (string) ($validated['name'] ?? ''),
-                    sourceLocale: $sourceLocale,
-                ),
-                'description' => filled($validated['description'] ?? null)
-                    ? $this->translationService->translateToLocales(
-                        text: (string) $validated['description'],
-                        sourceLocale: $sourceLocale,
-                    )
-                    : null,
+                ...$translatedUpdates,
             ],
         );
 
@@ -92,5 +109,18 @@ class AmenityController extends Controller
         $amenity->delete();
 
         return back()->with('success', __('ui.amenities.messages.deleted'));
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function targetLocales(): array
+    {
+        return ['es', 'en', 'de'];
+    }
+
+    private function isSameText(string $left, string $right): bool
+    {
+        return trim($left) === trim($right);
     }
 }
