@@ -19,6 +19,8 @@ return [
         'or' => 'or',
         'search' => 'Search...',
         'no_results' => 'No results found',
+        'yes' => 'Yes',
+        'no' => 'No',
     ],
     'layout' => [
         'auth' => [
@@ -216,6 +218,12 @@ return [
             'delete_action' => 'Delete',
             'delete_confirm' => 'Delete this property?',
             'loading_more' => 'Loading more properties...',
+        ],
+        'show' => [
+            'overview' => 'Overview',
+            'location' => 'Location',
+            'map_title' => 'Property location on map',
+            'directions_action' => 'Get directions',
         ],
         'form' => [
             'create' => 'Create',

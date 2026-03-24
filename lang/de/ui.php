@@ -19,6 +19,8 @@ return [
         'or' => 'oder',
         'search' => 'Suchen...',
         'no_results' => 'Keine Ergebnisse gefunden',
+        'yes' => 'Ja',
+        'no' => 'Nein',
     ],
     'layout' => [
         'auth' => [
@@ -216,6 +218,12 @@ return [
             'delete_action' => 'Loeschen',
             'delete_confirm' => 'Diese Immobilie loeschen?',
             'loading_more' => 'Weitere Immobilien werden geladen...',
+        ],
+        'show' => [
+            'overview' => 'Uebersicht',
+            'location' => 'Standort',
+            'map_title' => 'Standort der Immobilie auf der Karte',
+            'directions_action' => 'Route planen',
         ],
         'form' => [
             'create' => 'Erstellen',

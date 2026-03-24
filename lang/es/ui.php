@@ -19,6 +19,8 @@ return [
         'or' => 'o',
         'search' => 'Buscar...',
         'no_results' => 'No se encontraron resultados',
+        'yes' => 'Si',
+        'no' => 'No',
     ],
     'layout' => [
         'auth' => [
@@ -216,6 +218,12 @@ return [
             'delete_action' => 'Eliminar',
             'delete_confirm' => '¿Eliminar esta propiedad?',
             'loading_more' => 'Cargando más propiedades...',
+        ],
+        'show' => [
+            'overview' => 'Resumen',
+            'location' => 'Ubicación',
+            'map_title' => 'Ubicación de la propiedad en el mapa',
+            'directions_action' => 'Cómo llegar',
         ],
         'form' => [
             'create' => 'Crear',

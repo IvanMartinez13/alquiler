@@ -85,6 +85,7 @@ export default function PropertiesIndex({ properties, amenities }: Props) {
         {},
     );
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
+    const cardsScrollRef = useRef<HTMLDivElement | null>(null);
     const revealObserverRef = useRef<IntersectionObserver | null>(null);
     const pendingElementsRef = useRef<HTMLElement[]>([]);
 
@@ -333,7 +334,11 @@ export default function PropertiesIndex({ properties, amenities }: Props) {
                     observer.unobserve(entry.target);
                 });
             },
-            { threshold: 0.1, rootMargin: '0px 0px -8% 0px' },
+            {
+                threshold: 0.1,
+                root: cardsScrollRef.current ?? null,
+                rootMargin: '0px 0px -8% 0px',
+            },
         );
 
         pendingElementsRef.current.forEach((element) => {
@@ -365,7 +370,11 @@ export default function PropertiesIndex({ properties, amenities }: Props) {
                     Math.min(previous + PAGE_SIZE, filteredProperties.length),
                 );
             },
-            { threshold: 0.1, rootMargin: '0px 0px 220px 0px' },
+            {
+                threshold: 0.1,
+                root: cardsScrollRef.current ?? null,
+                rootMargin: '0px 0px 220px 0px',
+            },
         );
 
         observer.observe(node);
@@ -658,12 +667,12 @@ export default function PropertiesIndex({ properties, amenities }: Props) {
                     </Button>
                 </div>
 
-                <div className="grid gap-6 xl:grid-cols-[300px_minmax(0,1fr)]">
-                    <aside className="hidden space-y-4 xl:sticky xl:top-20 xl:block xl:h-fit">
+                <div className="grid gap-6 xl:h-[calc(100vh-12rem)] xl:grid-cols-[300px_minmax(0,1fr)]">
+                    <aside className="hidden space-y-4 xl:block xl:h-full xl:overflow-y-auto xl:pr-1">
                         {renderFiltersPanel('desktop')}
                     </aside>
 
-                    <section className="space-y-4">
+                    <section ref={cardsScrollRef} className="space-y-4 xl:h-full xl:overflow-y-auto xl:pr-1">
                         <div className="flex items-center justify-between gap-3 xl:hidden">
                             <Button
                                 type="button"

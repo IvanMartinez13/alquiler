@@ -960,18 +960,18 @@ export default function PropertyForm({
                                         'The first image is used as favorite in cards.',
                                     )}
                                 </p>
-                                <div className="grid gap-3 md:grid-cols-3">
+                                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                                     {existingImages.map((image, index) => (
                                         <div
                                             key={image.id}
-                                            className="space-y-2 rounded-lg border border-border p-2"
+                                            className="space-y-3 rounded-lg border border-border p-3"
                                         >
                                             <img
                                                 src={image.url}
                                                 alt={image.alt ?? 'Property image'}
-                                                className="h-28 w-full rounded-md object-cover"
+                                                className="h-36 w-full rounded-md object-cover"
                                             />
-                                            <div className="flex gap-2">
+                                            <div className="grid grid-cols-2 gap-2">
                                                 <Button
                                                     type="button"
                                                     variant={
@@ -980,6 +980,7 @@ export default function PropertyForm({
                                                             : 'outline'
                                                     }
                                                     size="sm"
+                                                    className="w-full"
                                                     onClick={() =>
                                                         markImageAsFavorite(image.id)
                                                     }
@@ -991,8 +992,18 @@ export default function PropertyForm({
                                                 </Button>
                                                 <Button
                                                     type="button"
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    className="w-full"
+                                                    onClick={() => removeImage(image.id)}
+                                                >
+                                                    {t('properties.form.remove', 'Remove')}
+                                                </Button>
+                                                <Button
+                                                    type="button"
                                                     variant="outline"
                                                     size="sm"
+                                                    className="w-full"
                                                     onClick={() => moveImage(image.id, 'up')}
                                                     disabled={index === 0}
                                                 >
@@ -1002,6 +1013,7 @@ export default function PropertyForm({
                                                     type="button"
                                                     variant="outline"
                                                     size="sm"
+                                                    className="w-full"
                                                     onClick={() =>
                                                         moveImage(image.id, 'down')
                                                     }
@@ -1010,14 +1022,6 @@ export default function PropertyForm({
                                                     }
                                                 >
                                                     {t('properties.form.down', 'Down')}
-                                                </Button>
-                                                <Button
-                                                    type="button"
-                                                    variant="destructive"
-                                                    size="sm"
-                                                    onClick={() => removeImage(image.id)}
-                                                >
-                                                    {t('properties.form.remove', 'Remove')}
                                                 </Button>
                                             </div>
                                         </div>
