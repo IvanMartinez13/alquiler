@@ -15,6 +15,8 @@ class StorePropertyRequest extends FormRequest
         $this->merge([
             'latitude' => $this->normalizeCoordinate($this->input('latitude')),
             'longitude' => $this->normalizeCoordinate($this->input('longitude')),
+            'check_in_time' => $this->normalizeTime($this->input('check_in_time')),
+            'check_out_time' => $this->normalizeTime($this->input('check_out_time')),
         ]);
     }
 
@@ -76,5 +78,24 @@ class StorePropertyRequest extends FormRequest
         $normalized = str_replace(',', '.', trim($value));
 
         return $normalized !== '' ? $normalized : null;
+    }
+
+    private function normalizeTime(mixed $value): mixed
+    {
+        if (! is_string($value)) {
+            return $value;
+        }
+
+        $normalized = trim($value);
+
+        if ($normalized === '') {
+            return $normalized;
+        }
+
+        if (preg_match('/^(\d{2}:\d{2}):\d{2}$/', $normalized, $matches) === 1) {
+            return $matches[1];
+        }
+
+        return $normalized;
     }
 }

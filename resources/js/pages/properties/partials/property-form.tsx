@@ -103,6 +103,7 @@ export default function PropertyForm({
         null,
     );
     const [removedImageIds, setRemovedImageIds] = useState<number[]>([]);
+    const formMethod: 'post' | 'put' = method === 'put' ? 'post' : method;
 
     const latitudeRef = useRef<HTMLInputElement | null>(null);
     const longitudeRef = useRef<HTMLInputElement | null>(null);
@@ -380,13 +381,17 @@ export default function PropertyForm({
     return (
         <Form
             action={action}
-            method={method}
+            method={formMethod}
             options={{ preserveScroll: true, preserveState: true }}
             onSubmit={handleFormSubmit}
             className="space-y-8"
         >
             {({ processing, errors, recentlySuccessful }) => (
                 <>
+                    {method === 'put' && (
+                        <input type="hidden" name="_method" value="PUT" />
+                    )}
+
                     <input type="hidden" name="source_locale" value={locale} />
 
                     {removedImageIds.map((id) => (
