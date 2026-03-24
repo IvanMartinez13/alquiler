@@ -1,4 +1,4 @@
-import { Form, Head, router } from '@inertiajs/react';
+import { Form, Head, router, usePage } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -19,6 +19,8 @@ type Props = {
 };
 
 export default function AmenitiesIndex({ amenities }: Props) {
+    const { locale } = usePage<{ locale: string }>().props;
+
     const breadcrumbs: BreadcrumbItem[] = [
         { title: 'Admin amenities', href: '/admin/amenities' },
     ];
@@ -54,6 +56,12 @@ export default function AmenitiesIndex({ amenities }: Props) {
                     >
                         {({ processing, errors }) => (
                             <>
+                                <input
+                                    type="hidden"
+                                    name="source_locale"
+                                    value={locale}
+                                />
+
                                 <div className="grid gap-2">
                                     <Label htmlFor="name">Name</Label>
                                     <Input id="name" name="name" required />
@@ -111,6 +119,12 @@ export default function AmenitiesIndex({ amenities }: Props) {
                             >
                                 {({ processing, errors }) => (
                                     <>
+                                        <input
+                                            type="hidden"
+                                            name="source_locale"
+                                            value={locale}
+                                        />
+
                                         <div className="grid gap-2">
                                             <Label
                                                 htmlFor={`name-${amenity.id}`}

@@ -20,10 +20,11 @@ class StoreAmenityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:120', 'unique:amenities,name'],
+            'name' => ['required', 'string', 'max:120'],
             'icon' => ['nullable', 'string', 'max:120'],
             'description' => ['nullable', 'string', 'max:500'],
             'is_active' => ['nullable', 'boolean'],
+            'source_locale' => ['nullable', 'string', 'in:es,en,de'],
         ];
     }
 }

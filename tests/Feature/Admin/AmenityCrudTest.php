@@ -23,10 +23,11 @@ test('administrador can manage amenities', function () {
             'icon' => 'wifi',
             'description' => 'Internet de alta velocidad',
             'is_active' => true,
+            'source_locale' => 'es',
         ])
         ->assertRedirect();
 
-    $amenity = Amenity::query()->where('name', 'Wifi')->firstOrFail();
+    $amenity = Amenity::query()->firstOrFail();
 
     $this->actingAs($admin)
         ->put(route('admin.amenities.update', $amenity), [
@@ -34,13 +35,18 @@ test('administrador can manage amenities', function () {
             'icon' => 'wifi',
             'description' => 'Internet estable',
             'is_active' => true,
+            'source_locale' => 'es',
         ])
         ->assertRedirect();
 
     $this->assertDatabaseHas('amenities', [
         'id' => $amenity->id,
-        'name' => 'Wifi premium',
     ]);
+
+    expect(filled($amenity->code))->toBeTrue();
+
+    expect($amenity->refresh()->name)->toBeArray();
+    expect($amenity->name['es'] ?? null)->toBe('Wifi premium');
 });
 
 test('non administrador is redirected when accessing amenities routes', function () {

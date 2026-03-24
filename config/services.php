@@ -57,4 +57,13 @@ return [
         'redirect' => env('APPLE_REDIRECT_URI'),
     ],
 
+    'translation' => [
+        'provider' => env('TRANSLATION_PROVIDER', 'deepl'),
+        'deepl' => [
+            'api_key' => env('DEEPL_API_KEY'),
+            'endpoint' => env('DEEPL_API_URL', 'https://api-free.deepl.com'),
+            'autodetect_source' => env('DEEPL_AUTODETECT_SOURCE', true),
+        ],
+    ],
+
 ];

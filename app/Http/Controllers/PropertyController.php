@@ -51,12 +51,20 @@ class PropertyController extends Controller
     {
         $this->authorize('create', Property::class);
 
+        $locale = app()->getLocale();
+
         return Inertia::render('properties/create', [
             'amenities' => Amenity::query()
                 ->where('is_active', true)
-                ->orderBy('name')
+                ->orderBy('code')
                 ->get(['id', 'name', 'icon'])
-                ->toArray(),
+                ->map(fn(Amenity $amenity): array => [
+                    'id' => $amenity->id,
+                    'name' => $amenity->getLocalizedName($locale),
+                    'icon' => $amenity->icon,
+                ])
+                ->values()
+                ->all(),
         ]);
     }
 
@@ -77,6 +85,7 @@ class PropertyController extends Controller
         $this->authorize('view', $property);
 
         $property->load(['amenities', 'images']);
+        $locale = app()->getLocale();
 
         return Inertia::render('properties/show', [
             'property' => [
@@ -101,7 +110,7 @@ class PropertyController extends Controller
                 'status' => $property->status->value,
                 'amenities' => $property->amenities->map(fn($amenity): array => [
                     'id' => $amenity->id,
-                    'name' => $amenity->name,
+                    'name' => $amenity->getLocalizedName($locale),
                     'icon' => $amenity->icon,
                 ])->values(),
                 'images' => $property->images->map(fn($image): array => [
@@ -119,6 +128,7 @@ class PropertyController extends Controller
         $this->authorize('update', $property);
 
         $property->load(['amenities', 'images']);
+        $locale = app()->getLocale();
 
         return Inertia::render('properties/edit', [
             'property' => [
@@ -151,9 +161,15 @@ class PropertyController extends Controller
             ],
             'amenities' => Amenity::query()
                 ->where('is_active', true)
-                ->orderBy('name')
+                ->orderBy('code')
                 ->get(['id', 'name', 'icon'])
-                ->toArray(),
+                ->map(fn(Amenity $amenity): array => [
+                    'id' => $amenity->id,
+                    'name' => $amenity->getLocalizedName($locale),
+                    'icon' => $amenity->icon,
+                ])
+                ->values()
+                ->all(),
         ]);
     }
 

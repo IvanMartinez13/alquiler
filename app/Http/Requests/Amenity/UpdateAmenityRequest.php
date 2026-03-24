@@ -4,7 +4,6 @@ namespace App\Http\Requests\Amenity;
 
 use App\Models\Amenity;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateAmenityRequest extends FormRequest
 {
@@ -22,14 +21,12 @@ class UpdateAmenityRequest extends FormRequest
      */
     public function rules(): array
     {
-        /** @var Amenity $amenity */
-        $amenity = $this->route('amenity');
-
         return [
-            'name' => ['required', 'string', 'max:120', Rule::unique('amenities', 'name')->ignore($amenity->id)],
+            'name' => ['required', 'string', 'max:120'],
             'icon' => ['nullable', 'string', 'max:120'],
             'description' => ['nullable', 'string', 'max:500'],
             'is_active' => ['nullable', 'boolean'],
+            'source_locale' => ['nullable', 'string', 'in:es,en,de'],
         ];
     }
 }
