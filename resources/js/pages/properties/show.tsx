@@ -77,10 +77,6 @@ export default function ShowProperty({ property }: Props) {
     }, []);
 
     useEffect(() => {
-        setSliderPage(0);
-    }, [itemsPerView, property.images.length]);
-
-    useEffect(() => {
         if (galleryIndex === null) {
             return;
         }
