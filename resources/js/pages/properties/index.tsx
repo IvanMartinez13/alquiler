@@ -12,7 +12,8 @@ import {
 import { useEffect, useMemo, useRef, useState } from 'react';
 import SpotlightCard from '@/components/SpotlightCard';
 import { Button } from '@/components/ui/button';
-import ChoicesSelect, { type ChoiceOption } from '@/components/ui/choices-select';
+import ChoicesSelect from '@/components/ui/choices-select';
+import type {ChoiceOption} from '@/components/ui/choices-select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -282,18 +283,53 @@ export default function PropertiesIndex({ properties, amenities }: Props) {
     const activeFiltersCount = useMemo(() => {
         let count = 0;
 
-        if (searchTerm.trim() !== '') count += 1;
-        if (typeFilter !== 'all') count += 1;
-        if (statusFilter !== 'all') count += 1;
-        if (countryFilter !== 'all') count += 1;
-        if (cityFilter !== 'all') count += 1;
-        if (freeCancellationFilter) count += 1;
-        if (maxGuestsFilter !== '') count += 1;
-        if (bedroomsFilter !== '') count += 1;
-        if (doubleBedsFilter !== '') count += 1;
-        if (singleBedsFilter !== '') count += 1;
-        if (bathroomsFilter !== '') count += 1;
-        if (selectedAmenities.length > 0) count += 1;
+        if (searchTerm.trim() !== '') {
+count += 1;
+}
+
+        if (typeFilter !== 'all') {
+count += 1;
+}
+
+        if (statusFilter !== 'all') {
+count += 1;
+}
+
+        if (countryFilter !== 'all') {
+count += 1;
+}
+
+        if (cityFilter !== 'all') {
+count += 1;
+}
+
+        if (freeCancellationFilter) {
+count += 1;
+}
+
+        if (maxGuestsFilter !== '') {
+count += 1;
+}
+
+        if (bedroomsFilter !== '') {
+count += 1;
+}
+
+        if (doubleBedsFilter !== '') {
+count += 1;
+}
+
+        if (singleBedsFilter !== '') {
+count += 1;
+}
+
+        if (bathroomsFilter !== '') {
+count += 1;
+}
+
+        if (selectedAmenities.length > 0) {
+count += 1;
+}
 
         return count;
     }, [
